@@ -47,6 +47,5 @@ casper.then(function() {
 
 casper.run(function() {
     // echo results in some pretty fashion
-    this.echo(links.length + ' links found:');
-    this.echo(' - ' + links.join('\n - ')).exit();
+    this.echo(JSON.stringify({links:links}, undefined, 4).exit();
 });
