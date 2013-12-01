@@ -40,13 +40,16 @@ casper.then(function() {
              return e.getAttribute('href');
           });
        }
-       var x = [];
-       x = getLinks('.RowStyle td:nth-child(1) a[href]');
-       return x.concat(getLinks('.AltRowStyle td:nth-child(1) a[href]'));
+       var all_links = [];
+       all_links = getLinks('.RowStyle td:nth-child(1) a[href]');
+       all_links = all_links.concat(getLinks('.AltRowStyle td:nth-child(1) a[href]'));
+       return all_links.map(function(el) {
+         return el.replace('..', 'https://e-nabavki.gov.mk/PublicAccess');
+       })
     });
 });
 
 casper.run(function() {
     // echo results in some pretty fashion
-    this.echo(JSON.stringify({links:links}, undefined, 4)).exit();
+    this.echo(JSON.stringify({links:links, page:pageNum, length:links.length}, undefined, 4)).exit();
 });
