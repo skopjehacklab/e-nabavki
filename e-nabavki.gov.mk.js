@@ -2,14 +2,16 @@ var URL = "https://e-nabavki.gov.mk/PublicAccess/NotificationForACPP/default.asp
 var links = [];
 var casper = require('casper').create();
 
-var pageSelectorName = "ctl00$ctl00$cphGlobal$cphPublicAccess$ucNotificationForACPP$gvNotifications$ctl13$ddlPageSelector";
-var pageNum = 9;
-var paginationPageNumSelector = ".PagerStyle > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(3) > span:nth-child(1)";
+var pageNum = casper.cli.options['page'] || 0;
 
+casper.on('remote.message', function(message) {
+    console.log(message);
+});
 
 casper.start(URL, function() {
    // select page
    var form = {};
+   var pageSelectorName = "ctl00$ctl00$cphGlobal$cphPublicAccess$ucNotificationForACPP$gvNotifications$ctl13$ddlPageSelector";
    form[pageSelectorName] = pageNum;
    this.fill('form', form);
 });
@@ -23,11 +25,10 @@ casper.wait(8000, function() {
 
 casper.waitFor(function check() {
    // wait for ajax pagination
-   return this.evaluate(function() {
+   return this.evaluate(function(pageNum) {
       var pag = document.querySelector('.PagerStyle');
-      console.log(pag.textContent);
-      return pag.textContent.indexOf('до 100 од') != -1;
-   });
+      return pag.textContent.indexOf('до ' + (pageNum + 1) * 10 + ' од') != -1;
+   }, pageNum);
 }, undefined, undefined, 15000);
 
 casper.then(function() {
@@ -40,12 +41,12 @@ casper.then(function() {
           });
        }
        var x = [];
-       x = getLinks('.RowStyle a[href]');
-       return x.concat(getLinks('.AltRowStyle a[href]'));
+       x = getLinks('.RowStyle td:nth-child(1) a[href]');
+       return x.concat(getLinks('.AltRowStyle td:nth-child(1) a[href]'));
     });
 });
 
 casper.run(function() {
     // echo results in some pretty fashion
-    this.echo(JSON.stringify({links:links}, undefined, 4).exit();
+    this.echo(JSON.stringify({links:links}, undefined, 4)).exit();
 });
