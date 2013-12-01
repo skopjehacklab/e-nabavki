@@ -1,8 +1,20 @@
+/*
+ * This casperjs script will open the web site of public procurements done
+ * by Macedonian government and public companies, crawl to the specified page
+ * in the list and extract the links to all the actual procurements.
+ *
+ * We must use casperjs because the site uses ASP and its stupid ajax pagination.
+ *
+ * Further processing of the links will be done with other tools.
+ *
+ */
+
+
 var URL = "https://e-nabavki.gov.mk/PublicAccess/NotificationForACPP/default.aspx?Level=3";
-var links = [];
 var casper = require('casper').create();
 
 var pageNum = casper.cli.options['page'] || 0;
+var links = [];
 
 casper.on('remote.message', function(message) {
     console.log(message);
@@ -15,13 +27,6 @@ casper.start(URL, function() {
    form[pageSelectorName] = pageNum;
    this.fill('form', form);
 });
-
-/*
-casper.wait(8000, function() {
-   this.capture('out.png');
-   this.echo('screenshot made');
-});
-*/
 
 casper.waitFor(function check() {
    // wait for ajax pagination
