@@ -14,15 +14,17 @@ casper.start(URL, function() {
    this.fill('form', form);
 });
 
+/*
 casper.wait(8000, function() {
    this.capture('out.png');
    this.echo('screenshot made');
 });
+*/
 
 casper.waitFor(function check() {
    // wait for ajax pagination
    return this.evaluate(function() {
-      var pag = document.querySelector(paginationPageNumSelector);
+      var pag = document.querySelector('.PagerStyle');
       console.log(pag.textContent);
       return pag.textContent.indexOf('до 100 од') != -1;
    });
