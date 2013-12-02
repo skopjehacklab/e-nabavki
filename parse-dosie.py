@@ -18,8 +18,9 @@ selectors = cfg.options('selectors')
 
 for value_id in selectors:
     name = cfg.get('selectors', value_id)
-    val = page.get_element_by_id(value_id)
-    results[name] = val.text.encode('utf-8')
+    val = page.get_element_by_id(value_id, None)
+    if val is not None:
+        results[name] = val.text.encode('utf-8')
 
 print json.dumps(results, ensure_ascii=False, indent=4)
 
