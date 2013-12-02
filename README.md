@@ -3,6 +3,20 @@ e-nabavki
 
 Machine friendly e-nabavki.gov.mk. Free the data.
 
+## Overview
+
+1. A script runs periodically. Get's all new links to _dosie_ from the web site. It
+   calls the `e-nabavki.gov.mk.js` casperjs script to get each page of the site, until
+   it reaches to the _dosie_ it already found. Stores IDs in CouchDB with state=pending.
+
+2. Another script runs periodically. find's all state=pending documents, downloads the
+   _dosie_, parses the interesting data from it, updates the CouchDB document with the
+   data and state=done. If it can't parse the document, just set state=unknown.
+
+3. PROFIT!!!
+
+
+
 ## Usage
 
 `casperjs e-nabavki.gov.mk.js --page=3`
@@ -33,7 +47,7 @@ To get the actual data from a link, like one of the links above, do:
 
 ```json
 {
-    "Вид на постапка": "Постапка со преговарање без претходно објавување на оглас", 
+    "Вид на постапка": "Постапка со преговарање без претходно објавување на оглас",
     "Назив на договорниот орган": "Ј.П.Градски Паркинг – Скопје"
 }
 
