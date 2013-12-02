@@ -1,0 +1,5 @@
+[database]
+url = http://db.example.net
+username = username
+password = secret
+
