@@ -3,3 +3,7 @@ url = http://db.example.net
 username = username
 password = secret
 
+
+[selectors]
+ctl00_ctl00_cphGlobal_cphPublicAccess_lblName = Назив на договорниот орган
+ctl00_ctl00_cphGlobal_cphPublicAccess_lblProcedureType = Вид на постапка
