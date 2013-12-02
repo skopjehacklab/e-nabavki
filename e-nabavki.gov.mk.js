@@ -13,7 +13,8 @@
 var URL = "https://e-nabavki.gov.mk/PublicAccess/NotificationForACPP/default.aspx?Level=3";
 var casper = require('casper').create();
 
-var pageNum = casper.cli.options['page'] || 0;
+var pageNum = casper.cli.options['page'] || 1;
+pageNum = pageNum - 1; // the select is 0 based, but --page is 1 based
 var links = [];
 
 casper.on('remote.message', function(message) {
@@ -56,5 +57,5 @@ casper.then(function() {
 
 casper.run(function() {
     // echo results in some pretty fashion
-    this.echo(JSON.stringify({links:links, page:pageNum, length:links.length}, undefined, 4)).exit();
+    this.echo(JSON.stringify({links:links, page:pageNum+1, length:links.length}, undefined, 4)).exit();
 });
