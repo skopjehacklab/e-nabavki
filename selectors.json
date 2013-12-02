@@ -1,0 +1,12 @@
+[
+    {
+        "meta$name": "Назив на договорниот орган",
+        "name_id": "#ctl00_ctl00_cphGlobal_cphPublicAccess_Label3",
+        "value_id": "#ctl00_ctl00_cphGlobal_cphPublicAccess_lblName"
+    },
+    {
+        "meta$name": "Вид на постапка",
+        "name_id": "#ctl00_ctl00_cphGlobal_cphPublicAccess_Label37",
+        "value_id": "#ctl00_ctl00_cphGlobal_cphPublicAccess_lblProcedureType"
+    }
+]

@@ -26,3 +26,15 @@ Machine friendly e-nabavki.gov.mk. Free the data.
 }
 
 ```
+
+To get the actual data from a link, like one of the links above, do:
+
+`python parse.py "https://e-nabavki.gov.mk/PublicAccess/Dossie/dosieNotificationForACPP.aspx?Id=5935ce16-dab9-42de-be6c-22fc9557b80a&Level=3"`
+
+```json
+{
+    "Вид на постапка": "Постапка со преговарање без претходно објавување на оглас", 
+    "Назив на договорниот орган": "Ј.П.Градски Паркинг – Скопје"
+}
+
+```
