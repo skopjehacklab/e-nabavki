@@ -1,5 +1,5 @@
 [database]
-url = http://db.example.net
+url = http://db.example.net:5984/some-database
 username = username
 password = secret
 
