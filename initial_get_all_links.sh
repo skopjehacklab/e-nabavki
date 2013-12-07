@@ -1,17 +1,31 @@
 #!/bin/bash
 #
-# Initial multiprocess resumable parse of 3500 pages from e-nabavki
-# to get all the dosie links.
+# Initial multiprocess, resumable download and parse of the 3500 index 
+# pages from e-nabavki to get all the dosie links on the the local filesystem.
 #
+# If invoked with an argument download only one page.
+# If invoked without arguments start 8 parallel processes to get the links.
 
-if [ ! -d "pages/" ]; then
-    mkdir pages
+# local dir of the script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PAGEDIR="${DIR}/pages"
+
+if [ ! -d "${PAGEDIR}" ]; then
+    mkdir "${PAGEDIR}"
 fi;
 
-page=0
-while [[ $page -lt 3500 ]]; do 
-	echo "$page" 
-	echo "pages/$page.json"; 
-	page=$(($page + 1));
-done | xargs -n 2 -P 8 ./link-page-get.sh
+if [ $# -lt 1 ]; then
+    while [[ $pagenum -lt 3500 ]]; do 
+	    echo "$pagenum";
+	    pagenum=$(($pagenum + 1));
+    done | xargs -n 1 -P 8 $0
+else
+    pagenum=$1
+    filename="${PAGEDIR}/$1.json"
+
+    if [ ! -f "$filename" ]; then
+        echo casperjs e-nabavki.gov.mk.js --page=$pagenum "to" "$filename"
+        casperjs ${DIR}/e-nabavki.gov.mk.js --page=$pagenum > "$filename"
+    fi
+fi
 
