@@ -1,36 +1,51 @@
 #! /usr/bin/env python2
 #  -*- encoding: utf-8 -*-
+"""Fetch dosies and upload the full html in couchdb.
+
+Multiprocessing is done through external xargs. Sample usage for multiprocessing should be:
+
+./fetch_dosies.py --print-state pending | xargs -n1 -P 10 ./fetch_dosies.py --dosie 
+"""
 
 import couchdbkit, restkit
-import subprocess
-import json
-import urlparse
-import itertools
 import ConfigParser
+import requests
+import argparse
 
-cfg = ConfigParser.ConfigParser()
-cfg.read(['settings.ini'])
+from index_links import connect_to_couchdb
 
-db_url = cfg.get('database', 'url')
-user = cfg.get('database', 'username')
-passwd = cfg.get('database', 'password')
+def fetch_dosie(id,couch):
+        doc = couch.get(id)
+        r = requests.get(doc['link'])
+        doc['state'] = 'downloaded'        
+        couch.save_doc(doc)
+        couch.put_attachment(doc,r.text,"dosie.html",r.headers['content-type'])
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
 
-couch = couchdbkit.Database(db_url, filters=[restkit.BasicAuth(user, passwd)])
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--print-state", choices=["pending","downloaded","parsed"],
+                        help="Print all dosie ids")
+    group.add_argument("--dosie", metavar="DOSIEID",
+                        help="Fetch one dosie from link")
+    group.add_argument("--stats",action="store_true",
+                        help="Prints stats from the db on pending, downloaded and parsed dosies")
 
-CMD = """python2 parse-dosie.py %s"""
+    args = parser.parse_args()
+    
+    couch = connect_to_couchdb()
 
+    if args.print_state:
+        for view_result in couch.view('dosie/by_state', key=args.print_state):
+            print couch.get(view_result['id'])['_id'],
 
-def run_parse_and_get_dosie(url):
-    cmd = (CMD % url).split()
-    print "getting dosie at %s" % url
-    parser = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    return json.load(parser.stdout)
+    if args.dosie:
+        fetch_dosie(args.dosie,couch)
 
-
-for view_result in couch.view('dosie/by_state', key='pending'):
-    doc = couch.get(view_result['id'])
-    new_doc = run_parse_and_get_dosie(doc['link'])
-    doc.update(new_doc)
-    doc['state'] = 'done'
-    couch.save_doc(doc)
+    if args.stats:
+        downloaded = couch.view('dosie/by_state',key='downloaded').count()
+        pending = couch.view('dosie/by_state',key='pending').count()
+        parsed = couch.view('dosie/by_state',key='parsed').count()
+        
+        print "Downloaded %d, pending %d, Fully parsed %d" % (downloaded, pending, parsed)
