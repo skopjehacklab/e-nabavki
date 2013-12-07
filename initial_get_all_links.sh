@@ -5,6 +5,12 @@
 #
 # If invoked with an argument download only one page.
 # If invoked without arguments start 8 parallel processes to get the links.
+#
+# When script finishes all the json files should be greater then 1000 bytes.
+# cleanup with find and run it again.
+#
+# find pages/ -name "*.json" -size -1000c -ls -exec rm {} \;
+#
 
 # local dir of the script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
