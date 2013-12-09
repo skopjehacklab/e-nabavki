@@ -49,13 +49,15 @@ if __name__ == "__main__":
 
     couch = connect_to_couchdb()
 
+    #normaly parse only downloaded
     for view_result in couch.view('dosie/by_state', key="downloaded"):
         doc = couch.get(view_result['id'])
         print doc['_id']
         couch.save_doc(parse(doc))
     
+    #parse all documents downloaded and already parsed
     if args.all:
-        for view_result in couch.view('dosue/by_state', key="done"):
+        for view_result in couch.view('dosue/by_state', key="parsed"):
             doc = couch.get(view_result['id'])
             couch.save_doc(parse(doc))
 
