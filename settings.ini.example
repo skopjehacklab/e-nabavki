@@ -8,6 +8,7 @@ password = secret
 ctl00_ctl00_cphGlobal_cphPublicAccess_lblName = Назив на договорниот орган
 ctl00_ctl00_cphGlobal_cphPublicAccess_lblProcedureType = Вид на постапка
 ctl00_ctl00_cphGlobal_cphPublicAccess_lblCategory = Категорија на договорен орган, негова главна активност или дејност
+ctl00_ctl00_cphGlobal_cphPublicAccess_lblPredmet = Предмет на договорот за јавна набавка
 ctl00_ctl00_cphGlobal_cphPublicAccess_lblSubjectOfProcurement = Предмет на договорот за јавна набавка
 ctl00_ctl00_cphGlobal_cphPublicAccess_lblPodetalenOpis = Подетален опис на предметот на договорот за јавна набавка
 ctl00_ctl00_cphGlobal_cphPublicAccess_lblContractPeriod = Времетраење на договорот
