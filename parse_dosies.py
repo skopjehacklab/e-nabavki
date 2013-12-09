@@ -36,7 +36,7 @@ def parse(doc):
         if val is not None:
             results[name] = val.text.encode('utf-8')
     
-    doc['state'] = 'done'
+    doc['state'] = 'parsed'
     
     return dict(doc.items() + results.items())
 
