@@ -4,7 +4,7 @@
 
 Multiprocessing is done through external xargs. Sample usage for multiprocessing should be:
 
-./fetch_dosies.py --print-state pending | xargs -n1 -P 10 ./fetch_dosies.py --dosie 
+./fetch_dosies.py --print-state pending | xargs -n1 -P 10 ./fetch_dosies.py --dosie
 """
 
 import couchdbkit, restkit
@@ -15,9 +15,10 @@ import argparse
 from index_links import connect_to_couchdb
 
 def fetch_dosie(id,couch):
-        doc = couch.get(id)
-        r = requests.get(doc['link'])
-        doc['state'] = 'downloaded'        
+    doc = couch.get(id)
+    r = requests.get(doc['link'])
+    if r.status_code == 200:
+        doc['state'] = 'downloaded'
         couch.save_doc(doc)
         couch.put_attachment(doc,r.text,"dosie.html",r.headers['content-type'])
 
@@ -33,7 +34,7 @@ if __name__ == "__main__":
                         help="Prints stats from the db on pending, downloaded and parsed dosies")
 
     args = parser.parse_args()
-    
+
     couch = connect_to_couchdb()
 
     if args.print_state:
@@ -47,5 +48,5 @@ if __name__ == "__main__":
         downloaded = couch.view('dosie/by_state',key='downloaded').count()
         pending = couch.view('dosie/by_state',key='pending').count()
         parsed = couch.view('dosie/by_state',key='parsed').count()
-        
+
         print "Downloaded %d, pending %d, Fully parsed %d" % (downloaded, pending, parsed)
