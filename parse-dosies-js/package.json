@@ -1,0 +1,20 @@
+{
+  "name": "parse-dosies-js",
+  "version": "0.1.0",
+  "description": "Parses dosies from --url <url> with --config settings.ini",
+  "main": "parse-dosies.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "spion",
+  "license": "MIT",
+  "dependencies": {
+    "ini": "~1.1.0",
+    "bluebird": "~0.11.5-0",
+    "cheerio": "~0.12.4",
+    "request": "~2.29.0",
+    "optimist": "~0.6.0",
+    "promise-streams": "~0.1.8",
+    "split": "~0.2.10"
+  }
+}
